@@ -1,0 +1,21 @@
+
+def check_and_update(target_table, search_id, new_val)
+    # Поиск строки по ID
+    target_row = find(target_table, "id", search_id)
+    
+
+    if target_row != 0 then
+        update(target_table, target_row, "status", new_val)
+        write("Status updated")
+    else
+        write("Record not found")
+
+
+my_db = table("id", "name", "status") 
+
+
+user_id = 101
+status_active = "active"
+
+
+check_and_update(my_db, user_id, status_active)
