@@ -1,0 +1,7 @@
+def update_val(n) {
+    n = 100
+}
+
+x = 10
+update_val(x)
+write(x)
