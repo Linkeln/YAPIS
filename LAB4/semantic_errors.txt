@@ -1,0 +1,10 @@
+def calc(a, b) {
+    res = a + b
+    return res
+}
+
+val = calc(10)
+
+write(undefined_variable)
+
+z = ghost_function(1)
