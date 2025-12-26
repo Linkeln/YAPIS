@@ -1,0 +1,13 @@
+def get_status(t, search_id) {
+    target_row = find(t, "id", search_id)
+    if target_row != 0 then {
+        return (string) target_row["status"]
+    } else {
+        return "not_found"
+    }
+}
+
+my_db = table("id", "status")
+user_id = 101
+res = get_status(my_db, user_id)
+write(res)
