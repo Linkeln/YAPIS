@@ -1,0 +1,20 @@
+log_count = 0
+
+def process_queue(queue_table) {
+    limit = 10
+    
+    until log_count == limit {
+        entry = find(queue_table, "processed", false)
+        
+        if entry != 0 then {
+            update(queue_table, entry, "processed", true)
+            log_count = log_count + 1
+        } else {
+            log_count = 10 
+        }
+    }
+}
+
+task_table = table("task_id", "processed")
+process_queue(task_table)
+write(log_count)

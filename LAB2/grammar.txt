@@ -2,9 +2,8 @@ grammar RelationalLang;
 
 
 program
-    : subprogram* statement+ EOF
+    : (subprogram | statement | NEWLINE)* EOF
     ;
-
 
 subprogram
     : 'def' ID '(' params? ')' block
@@ -16,27 +15,27 @@ params
 
 
 block
-    : NEWLINE INDENT statement+ DEDENT
-    | NEWLINE statement 
+    : NEWLINE* INDENT (statement | NEWLINE)* DEDENT
+    | NEWLINE+ statement
     ;
 
 statement
-    : assignment      
-    | ifStmt          
-    | whileStmt       
-    | untilStmt       
-    | forStmt         
-    | functionCall    
+    : ifStmt
+    | whileStmt
+    | untilStmt
+    | forStmt
+    | assignment
+    | functionCall
     | returnStmt
-    | NEWLINE
     ;
 
 assignment
-    : ID '=' expr    
+    : ID '=' expr
     ;
 
+
 ifStmt
-    : 'if' expr 'then' block ('else' block)?
+    : 'if' expr 'then' block ( (NEWLINE)* 'else' block )?
     ;
 
 whileStmt
@@ -55,14 +54,13 @@ returnStmt
     : 'return' expr
     ;
 
-
 expr
-    : '(' TYPE ')' expr             
-    | '(' expr ')'                  
-    | expr (MUL | DIV | MOD) expr   
-    | expr (ADD | SUB) expr         
-    | expr (EQ | NEQ | GT | LT) expr 
-    | expr (AND | OR) expr          
+    : '(' TYPE ')' expr
+    | '(' expr ')'
+    | expr (MUL | DIV | MOD) expr
+    | expr (ADD | SUB) expr
+    | expr (EQ | NEQ | GT | LT | GE | LE) expr
+    | expr (AND | OR) expr
     | primary
     ;
 
@@ -71,9 +69,8 @@ primary
     | NUMBER
     | STRING
     | functionCall
-    | ID '[' expr ']' 
+    | ID '[' expr ']'
     ;
-
 
 functionCall
     : 'read' '(' ')'
@@ -84,15 +81,13 @@ functionCall
     | ID '(' (expr (',' expr)*)? ')'
     ;
 
-
-TYPE: 'table' | 'row' | 'column' | 'int' | 'float'; 
-
+TYPE: 'table' | 'row' | 'column' | 'int' | 'float';
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER: [0-9]+ ('.' [0-9]+)?;
 STRING: '"' .*? '"';
 
 ADD: '+'; SUB: '-'; MUL: '*'; DIV: '/'; MOD: '%';
-EQ: '=='; NEQ: '!='; GT: '>'; LT: '<';
+EQ: '=='; NEQ: '!='; GT: '>'; LT: '<'; GE: '>='; LE: '<=';
 AND: '&&'; OR: '||';
 
 NEWLINE: '\r'? '\n';
